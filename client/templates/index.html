@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users</title>
+    <script>
+      document.cookie = "test1=Hello; SameSite=None; Secure"
+      document.cookie = "test2=World; SameSite=None; Secure"
+    </script>
+    <script>
+      async function getUsers() {
+        let response = await fetch("http://localhost:8000/users", {
+          headers: {
+            "content-type": "application/json"
+          },
+          credentials: "include"
+        })
+        let data = await response.json()
+        return data
+      }
+      getUsers()
+        .then((data) => {
+          let name = document.getElementById("name")
+          name.innerHTML = data[0].name
+          let age = document.getElementById("age")
+          age.innerHTML = data[0].age
+        })
+        .catch((err) => {
+          let errortag = document.getElementById("error")
+          errortag.innerHTML = err.message
+        })
+    </script>
+  </head>
+
+  <body>
+    <p id="name" style="color: blue; font-size: 16px"></p>
+    <p id="age" style="color: navy; font-size: 14px"></p>
+    <p id="error" style="color: red; font-size: 13px"></p>
+  </body>
+</html>
